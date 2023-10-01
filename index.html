@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+    <style>
+      .timer {
+        font-family: "Roboto", sans-serif;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 40px;
+      }
+      .time {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 10px solid red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .time__block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+
+      input {
+        display: block;
+        margin: 0 auto;
+        padding: 10px 20px;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        color: white;
+        cursor: pointer;
+      }
+
+      .start {
+        background-color: green;
+      }
+      .pause {
+        background-color: orange;
+      }
+      .reset {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="timer">
+      <!-- display component goes here -->
+      <div class="time">
+        <div class="time__block">
+          <p class="time__block--number">00</p>
+          <p class="time__block--label">minutes</p>
+        </div>
+        <div class="time__block">
+          <p class="time__block--number second">00</p>
+          <p class="time__block--label">seconds</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input type="text" />
+        <div>
+          <button class="start">start</button>
+          <button class="pause">pause</button>
+          <button class="reset">reset</button>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    const input = document.querySelector("input");
+    const start = document.querySelector(".start");
+    const pause = document.querySelector(".pause");
+    const reset = document.querySelector(".reset");
+    const minutes = document.querySelector(".time__block--number");
+    const seconds = document.querySelector(".second");
+
+    let time = 0;
+    let interval;
+    let paused = false;
+
+    input.addEventListener("input", (e) => {
+      time = e.target.value * 60;
+      minutes.textContent = e.target.value;
+    });
+
+    start.addEventListener("click", () => {
+      startTimer();
+    });
+
+    pause.addEventListener("click", () => {
+      paused = !paused;
+    });
+
+    reset.addEventListener("click", () => {
+      clearInterval(interval);
+      time = input.value * 60 || 0;
+      minutes.textContent = input.value || "00";
+      seconds.textContent = "00";
+    });
+
+    function startTimer() {
+      interval = setInterval(() => {
+        if (paused) return;
+        time--;
+        const numberOfMinutes = Math.floor(time / 60);
+        const numberOfSeconds = time % 60;
+        minutes.textContent = numberOfMinutes;
+        seconds.textContent = numberOfSeconds;
+      }, 1000);
+
+      if (time < 0) {
+        clearInterval(interval);
+        time = 0;
+      }
+    }
+  </script>
+</html>
